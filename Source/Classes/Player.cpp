@@ -86,6 +86,8 @@ void Player::drillDown(bool recursive) {
 						nullptr));
 			}
 
+			Device::vibrate(0.09);
+
 			char path[256];
 
 			sprintf(path, "combo_%d.png", combo + 1);
