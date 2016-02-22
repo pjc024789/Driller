@@ -21,4 +21,6 @@ private:
 	bool isMovable = true;
 	int depth = 0;
 	int combo = 0;
+
+	cocos2d::Sprite *prevCombo;
 };

@@ -64,6 +64,8 @@ bool HelloWorld::init()
 	cache->addSpriteFramesWithFile("character.plist");
 	cache->addSpriteFramesWithFile("3pang.plist");
 	cache->addSpriteFramesWithFile("pang.plist");
+	cache->addSpriteFramesWithFile("combo.plist");
+	cache->addSpriteFramesWithFile("timeup.plist");
 
 	auto sprite = EffectSprite::createWithSpriteFrame(cache->getSpriteFrameByName("idle_0.png"));
 
@@ -158,6 +160,19 @@ bool HelloWorld::init()
 
 	}, 0.35, "key");
 
+	scheduleOnce([this](float dt) {
+		auto timeup = Sprite::create();
+
+		timeup->setScale(0.0);
+		timeup->setPosition(160, 340);
+		timeup->runAction(FadeIn::create(0.6));
+		timeup->runAction(
+			EaseElasticOut::create(
+				ScaleTo::create(1.0, 0.7)));
+		timeup->runAction(SpriteAnimation::createNonLooped("timeup", 0.05f));
+		addChild(timeup, 100);
+	}, 15.0f, "timeup");
+	
     return true;
 }
 
@@ -181,7 +196,7 @@ void HelloWorld::buildBlocks() {
 	for (int i = 0; i < 5; i++) {
 		for (int j = 0; j < maxDepth; j++) {
 			auto types = 
-				(j >= maxDepth - 30 && j <= maxDepth - 24) ? 1 : 4;
+				(j >= maxDepth - 10 && j <= maxDepth - 5) ? 1 : 4;
 
 			auto block = Block::create((Block::Type)(rand() % types));
 			auto pos = Vec2(i * 64 + 32, j * 64 + 32 - ((maxDepth-5) * 64));

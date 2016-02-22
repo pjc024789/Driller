@@ -74,6 +74,42 @@ void Player::drillDown(bool recursive) {
 			effect->setOpacity(128);
 			effect->setPosition(getPosition());
 			scene->addChild(effect, 100);
+
+			if (prevCombo)
+			{
+				prevCombo->stopAllActions();
+				prevCombo->setOpacity(32);
+				prevCombo->runAction(
+					Sequence::create(
+						ScaleTo::create(0.2, 3),
+						RemoveSelf::create(),
+						nullptr));
+			}
+
+			char path[256];
+
+			sprintf(path, "combo_%d.png", combo + 1);
+
+			auto comboText = Sprite::createWithSpriteFrameName("combo.png");
+			auto comboCount = Sprite::createWithSpriteFrameName(path);
+
+			comboCount->setPosition(Vec2(comboText->getContentSize().width/2, 60));
+
+			comboText->addChild(comboCount, 1);
+			comboText->setCascadeOpacityEnabled(true);
+			comboText->setPosition(getPosition() + Vec2(0, 100));
+			comboText->setScale(0);
+			comboText->runAction(
+				EaseElasticOut::create(
+					ScaleTo::create(0.45, 1.0 + combo * 0.1)));
+			comboText->runAction(
+				Sequence::create(
+					DelayTime::create(0.8),
+					FadeOut::create(0.3),
+					nullptr));
+			scene->addChild(comboText, 100);
+
+			prevCombo = comboText;
 		}
 	}
 
